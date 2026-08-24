@@ -1,0 +1,28 @@
+{
+  "name": "parkinonline",
+  "version": "1.0.0",
+  "description": "This project focuses on a virtual parking system that enables registered web users to check real-time parking availability.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TainyToon/ParkinOnline.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TainyToon/ParkinOnline/issues"
+  },
+  "homepage": "https://github.com/TainyToon/ParkinOnline#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "morgan": "^1.11.0",
+    "pg": "^8.23.0"
+  }
+}
