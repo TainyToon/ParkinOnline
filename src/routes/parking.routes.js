@@ -4,18 +4,18 @@ import {getParking, getParkingById, createParking, deleteParking, updateParking}
 const router = Router();
 
 //Get all information about parking
-router.get('/parking', getParking);
+router.get('/', getParking);
 
 //Get the  information about id_parking
-router.get('/parking/:id', getParkingById);
+router.get('/:id', getParkingById);
 
 //Create a new parking
-router.post('/parking', createParking);
+router.post('/', createParking); //This comand only will be used by the admin, so we need to implement a middleware to check if the user is an admin(future implementation)
 
 //Delete a parking by id_parking
-router.delete('/parking/:id', deleteParking);
+router.delete('/:id', deleteParking); //This comand only will be used by the admin, so we need to implement a middleware to check if the user is an admin(future implementation)
 
 //Update a parking by id_parking
-router.put('/parking/:id', updateParking);
+router.put('/:id', updateParking);
 
 export default router;

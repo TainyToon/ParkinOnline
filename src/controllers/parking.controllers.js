@@ -1,31 +1,74 @@
-import pool from '../db.js';
+import {
+  findAllParkings,
+  findParkingById,
+  createParkingService,
+  deletedParkingService,
+  updatedParkingService,
+} from "../services/parking.service.js";
 
 export const getParking = async (req, res) => {
-    const { rows } = await pool.query('SELECT id, name, address, total_spaces, created_at, updated_at FROM parking_lots');
-    return res.json(rows);
+  const parking = await findAllParkings();
+  return res.json(parking);
 };
 
 export const getParkingById = async (req, res) => {
-    const { id } = req.params;
-    const { rows } = await pool.query('SELECT id, name, address, total_spaces, created_at, updated_at FROM parking_lots WHERE id = $1', [id]);
-    return res.json(rows);
+  const { id } = req.params;
+  const parking = await findParkingById(id);
+  if (!parking) {
+    return res.status(404).json({
+      message: "Parking lot not found",
+    });
+  }
+
+  return res.json(parking);
 };
 
 export const createParking = async (req, res) => {
-    const { name, address, total_spaces } = req.body;
-    const { rows } = await pool.query(' INSERT INTO parking_lots VALUES ($1, $2, $3) RETURNING *', [name, address, total_spaces]);
-    return res.json(rows);
+
+    const {
+        name,
+        address,
+        total_spaces
+    } = req.body;
+
+    const result = await createParkingService(
+        name,
+        address,
+        total_spaces
+    );
+
+    if (result.error) {
+        return res.status(400).json({
+            message: result.error
+        });
+    }
+
+    return res.status(201).json(result.parking);
 };
 
 export const deleteParking = async (req, res) => {
-    const { id } = req.params;
-    const { rows } = await pool.query('DELETE FROM parking_lots WHERE id = $1 RETURNING *', [id]);
-    return res.json(rows);
+  const { id } = req.params;
+  const deletedParking = await deletedParkingService(id);
+  if (!deletedParking) {
+    return res.status(404).json({ message: "Parking lot not found" });
+  }
+  console.log(deletedParking);
+  return res.status(200).json({
+    message: "Parking lot deleted successfully",
+  });
 };
 
 export const updateParking = async (req, res) => {
-    const { id } = req.params;
-    const { name, address, total_spaces } = req.body;
-    const { rows } = await pool.query('UPDATE parking_lots SET name = $1, address = $2, total_spaces = $3, updated_at = NOW() WHERE id = $4 RETURNING *', [name, address, total_spaces, id]);
-    return res.json(rows);
+  const { id } = req.params;
+  const { name, address, total_spaces } = req.body;
+  const updatedParking = await updatedParkingService(
+    id,
+    name,
+    address,
+    total_spaces,
+  );
+  if (!updatedParking) {
+    return res.status(404).json({ message: "Parking lot not found" });
+  }
+  return res.json(updatedParking);
 };
